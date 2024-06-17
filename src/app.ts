@@ -8,8 +8,9 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let gravity: number = 1;
-//let fallSpeed = 0;
+//let fallSpeed: number = 0;
 const maxGravity: number = 20;
+const maxSpeed: number = 6;
 
 let onGround: boolean = false;
 
@@ -18,7 +19,7 @@ let vx: number = 0;
 
 let collisionBlocks: collisionBlock[] = [];
 
-export type callback = (block: collisionBlock) => void;
+export type callback = (block: collisionBlock, cat: cat) => void;
 
 export class collisionBlock { 
     posX: number;
@@ -50,7 +51,7 @@ export class cat {
     }
 }
 
-const Murri: cat = new cat(50, 50, 50, 50, 3);
+const Murri: cat = new cat(50, 50, 50, 50, 1);
 
 /*
 const cat: { posX: number, posY: number, w: number, h: number, speed: number } = {
@@ -63,6 +64,7 @@ const cat: { posX: number, posY: number, w: number, h: number, speed: number } =
 */
 function init(): void{
     collisionBlocks = [
+        new collisionBlock(200, 100, 110, 5),
         new collisionBlock(400, 10, 200, 5),
         new collisionBlock(200, 205, 5, 200),
         new collisionBlock(200, 10, 5, 200)
@@ -76,47 +78,71 @@ setInterval((): void=>{
     moveCat();
     drawCat();
     drawBlocks();
-}, 1000/30);
+}, 1000/60);
 
 function moveCat(): void{
     
 
-    if( keyStates['d'] ){ vx += Murri.speed }
-    if( keyStates['a'] ){ vx -= Murri.speed }
+    if( keyStates['d'] ){ if(vx < maxSpeed){vx += Murri.speed} }
+    else{
+        vx = vx > 0.01 ? vx / 2 : vx;
+    }
+
+    if( keyStates['a'] ){ if(vx > -maxSpeed){vx -= Murri.speed} }
+    else{
+        vx = vx < -0.01 ? vx / 2 : vx;
+    }
+    
+    if(vx < 0.01 && vx > -0.01){ vx = 0 }
 
     //if( keyStates['s'] ){  }
+   
 
     
     if( keyStates['w'] ){
         //Murri.posY -= Murri.speed 
         if(onGround){
             onGround = false;
-            vy -= 10;
+            vy -= 25;
         }
     }
 
     if(gravity <= maxGravity && !onGround){
         vy += maxGravity/16;
+        //console.log('gravity');
     }
-
     
-    
-    
-    Murri.posY += vy;
+    /*Murri.posY += vy;
     Murri.posX += vx;
-    vx = 0;
+    vx = 0;*/
 
     collisionX(vx, Murri, collisionBlocks, collisionx);
     collisionY(vy, Murri, collisionBlocks, collisiony);
+    //vy = onGround ? 0 : vy;
+    //console.log(onGround);
+    //console.log(vy);
+    //console.log(vx)
 }
 
-function collisiony(block: collisionBlock): void{
-    onGround = true;
-    Murri.posY = block.posY - Murri.h;
+function collisiony(block: collisionBlock, cat: cat): void{
+    if(block.posY > cat.posY){
+        onGround = true;
+        vy = 0;
+    } else {
+        vy = 0;
+    }
+        
+    console.log('collision Y');
 }
 
-function collisionx(block: collisionBlock): void {
-    
+function collisionx(block: collisionBlock, cat: cat): void {
+    /*console.log(`
+        collision X 
+        ${Murri.posY + Murri.h}
+        ${block.posY}
+    `);*/
+    vx = 0;
+    console.log('collision X');
 }
 
 function drawCat(): void{
