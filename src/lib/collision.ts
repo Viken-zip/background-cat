@@ -1,4 +1,6 @@
-import { collisionBlock, cat, callback } from "../app";
+import { callback } from "../app";
+import { cat } from "./cat";
+import { collisionBlock } from "./blocks";
 
 export function collisionY(vy: number, cat: cat, blocks: collisionBlock[], collisionCallback: callback){
     cat.posY += vy;
