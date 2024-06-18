@@ -30,9 +30,18 @@ let vx: number = 0;
 
 export const Murri: cat = new cat(50, 50, 50, 50, 1);
 
-export function moveCat(): void{
-    
+export function drawCat(ctx: any): void{
+    ctx?.beginPath();
+    ctx?.rect(
+        Murri.posX,
+        Murri.posY,
+        Murri.w,
+        Murri.h
+    );
+    ctx?.stroke();
+}
 
+export function moveCat(): void{
     if( keyStates['d'] ){ if(vx < maxSpeed){vx += Murri.speed / 6} }
     else{
         vx = vx > 0.01 ? vx / 1.2 : vx;

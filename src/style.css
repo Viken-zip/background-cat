@@ -1,12 +1,28 @@
 *{
-    overflow: hidden;
     margin: 0;
+    overflow-x: hidden;
+    font-family: sans-serif;
 }
 .container{
+    display: flex;
+    flex-direction: column;
+    height: 4000px;
+}
+#canvasContainer{
     width: 100vw;
-    height: 100vh;
+    height: 50vh;
+    overflow: hidden;
+}
+#gameCover{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 50vh;
+    background-color: rgba(0, 0, 0, 0.6);
     overflow: hidden;
 }
 #canvas{
     background-color: white;
+    overflow: hidden;
 }
