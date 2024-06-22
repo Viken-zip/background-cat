@@ -5,6 +5,11 @@ import { createBlocks } from "./lib/blocks";
 
 const canvas = <HTMLCanvasElement> document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
+
+
+
+
 let gameOn: boolean = false;
 
 const canvasContainerDiv = <HTMLDivElement> document.getElementById('canvasContainer');
@@ -34,6 +39,7 @@ init();
 
 setInterval((): void=>{
     if(gameOn){
+        
         ctx?.clearRect(0, 0, canvas.width, canvas.height);
         moveCat();
         drawCat(ctx);
