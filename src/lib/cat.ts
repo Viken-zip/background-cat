@@ -1,9 +1,10 @@
 import { keys, keyStates } from "./keys"
 import { collisionBlock, collisionBlocks } from "./blocks";
 import { collisionX, collisionY } from "./collision";
+import { MurriSprite, getImage, updateAnimation } from "./animation";
 
 /** @type {CanvasRenderingContext2D} */
-const MurriSprite = new Image(); 
+/*const MurriSprite = new Image(); 
 const LeftMurriSprite = new Image();
 MurriSprite.src = './sprites/big_murri_sprite.png';
 const spriteImgSize = 20*5;
@@ -11,7 +12,7 @@ let idleTime = 0;
 let spriteRow = 0;
 
 let frame = 0;
-let sitFrame = 0;
+let sitFrame = 0;*/
 
 export class cat {
     posX: number;
@@ -50,7 +51,21 @@ export function drawCat(ctx: any): void{
         Murri.h
     );
     ctx?.stroke();*/
-    if(idleTime >= 60*15){
+    const Values = getImage();
+    ctx?.drawImage(
+        MurriSprite,
+        Values[0],
+        Values[1],
+        Values[2],
+        Values[2],
+        Murri.posX,
+        Murri.posY,
+        Murri.w,
+        Murri.h
+    );
+
+
+    /*if(idleTime >= 60*15){
         spriteRow = 0;
     } else {
         spriteRow = 1;
@@ -78,7 +93,7 @@ export function drawCat(ctx: any): void{
         }
     }
     frame++;
-    idleTime++;
+    idleTime++;*/
 }
 
 export function moveCat(): void{
@@ -101,9 +116,9 @@ export function moveCat(): void{
         }
     }
 
-    if(vx > 0 || vx < 0 || vy > 0 || vy < 0){
+    /*if(vx > 0 || vx < 0 || vy > 0 || vy < 0){
         idleTime = 0;
-    }
+    }*/
 
     if(gravity <= maxGravity){
         vy += maxGravity/16;
@@ -113,6 +128,7 @@ export function moveCat(): void{
     collisionY(vy, Murri, collisionBlocks, collisiony);
 
     //console.log(vx);
+    updateAnimation(vx, vy);
 }
 
 function collisiony(block: collisionBlock, cat: cat): void{
