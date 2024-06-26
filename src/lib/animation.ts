@@ -1,67 +1,60 @@
-/*
-1: sit
-2: idle stand
-3: run
-4: jump 3-4 upp, 5 mid, 6-7 down
-*/
 export const MurriSprite = new Image();
-MurriSprite.src = './sprites/big_murri_sprite_sheet.png';
+MurriSprite.src = './sprites/big_murri_sprite.png';
 
 const sizePerFrame: number = 100;
 
 let row: number = 0;
 let column: number = 0;
 
-let frameSinceChange = 0;
-let frameSinceMoved = 0;
+let frameSinceChange: number = 0;
+let frameSinceMoved: number = 0;
 
 let inAri: boolean = false;
+let facingRight: boolean = true;
+
+function updateImg(vx: number, vy: number){
+    if(Math.abs(vx) > 0){
+        row = facingRight ? 4 : 5;
+        frameSinceMoved = 0;
+    } else {
+        //standing still
+        frameSinceMoved++;
+        if(frameSinceMoved >= 240){
+            row = facingRight ? 0 : 1;
+        } else {
+            row = facingRight ? 2 : 3;
+        }
+    }
+
+    if(Math.abs(vy) > 0){
+        inAri = true;
+        column = vy > 0 ? 7 : 4;
+        row = facingRight ? 6 : 7;
+    }else{
+        inAri = false;
+        
+    }
+}
 
 export function updateAnimation(vx: number, vy: number){
+    if(vx > 0){
+        facingRight = true;
+    } else if(vx < 0){
+        facingRight = false;
+    }
+
+    // changes wich stage of the animation to play
     if(frameSinceChange/20 == 1){
-        if(column < 7){
+        if(column < 7 && !inAri){
             column++;
         } else {
             column = 0;
         }
+        //console.log(column);
         frameSinceChange = 0;
     }
     frameSinceChange++;
-
-    if(Math.abs(vx) > 0){
-        frameSinceMoved = 0;
-        row = 2;
-    }
-
-    if(frameSinceMoved >= 240){
-        row = 0;
-    } else if(vx == 0) {
-        row = 1;
-    }
-    frameSinceMoved++;
-
-    if(vy < 0){
-        //goes up
-        row = 3;
-        column = 5;
-        if(vy < -5){
-            row = 3;
-            column = 4;
-        }
-        inAri = true;
-    }else if(vy > 0){
-        //goes down
-        row = 3;
-        column = 5;
-        if(vy > 5){
-            row = 3;
-            column = 7;
-            inAri = false;
-        }
-    }else if(vy == 0 && inAri){
-        row = 3;
-        column = 5;
-    }
+    updateImg(vx, vy);
 }
 
 export function getImage(){
