@@ -50,7 +50,6 @@ export function updateAnimation(vx: number, vy: number){
         } else {
             column = 0;
         }
-        //console.log(column);
         frameSinceChange = 0;
     }
     frameSinceChange++;
